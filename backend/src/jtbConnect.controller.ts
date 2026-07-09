@@ -43,10 +43,10 @@ export class PmsJtbConnectController {
           throw new HttpException(e.response?.data, e.response?.status);
         }
         else if (e.request) {
-          this.logger.log(`error.request = ${e.request}`);
-          throw new HttpException(e.request, e.status);
+          this.logger.log(`error.message = ${e.message}`);
+          throw new HttpException(e.message, 504);
         }
-        throw new HttpException(e.message, e.status);
+        throw new HttpException(e.message, e.status ?? 500);
       }),
     );
   }
@@ -80,10 +80,10 @@ export class PmsJtbConnectController {
           throw new HttpException(e.response?.data, e.response?.status);
         }
         else if (e.request) {
-          this.logger.log(`error.request = ${e.request}`);
-          throw new HttpException(e.request, e.status);
+          this.logger.log(`error.message = ${e.message}`);
+          throw new HttpException(e.message, 504);
         }
-        throw new HttpException(e.message, e.status);
+        throw new HttpException(e.message, e.status ?? 500);
       }),
     );
   }
@@ -114,10 +114,10 @@ export class PmsJtbConnectController {
           throw new HttpException(e.response?.data, e.response?.status);
         }
         else if (e.request) {
-          this.logger.log(`error.request = ${e.request}`);
-          throw new HttpException(e.request, e.status);
+          this.logger.log(`error.message = ${e.message}`);
+          throw new HttpException(e.message, 504);
         }
-        throw new HttpException(e.message, e.status);
+        throw new HttpException(e.message, e.status ?? 500);
       }),
     );
   }
@@ -148,10 +148,10 @@ export class PmsJtbConnectController {
           throw new HttpException(e.response?.data, e.response?.status);
         }
         else if (e.request) {
-          this.logger.log(`error.request = ${e.request}`);
-          throw new HttpException(e.request, e.status);
+          this.logger.log(`error.message = ${e.message}`);
+          throw new HttpException(e.message, 504);
         }
-        throw new HttpException(e.message, e.status);
+        throw new HttpException(e.message, e.status ?? 500);
       }),
     );
   }
