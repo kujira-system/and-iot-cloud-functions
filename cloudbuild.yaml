@@ -2,13 +2,13 @@ timeout: 1800s
 steps:
 
   - id: 'Install: backend'
-    name: node:18
+    name: node:22
     dir: './backend'
     entrypoint: npm
     args: ['install']
 
   - id: 'Build: backend'
-    name: node:18
+    name: node:22
     dir: './backend'
     entrypoint: npm
     args: ['run', 'build:prod']
@@ -36,7 +36,7 @@ steps:
       - deploy
       - ${_FUNCTION_NAME}
       - --entry-point=api
-      - --runtime=nodejs18
+      - --runtime=nodejs22
       - --region=${_FUNCTION_REGION}
       - --source=.
       - --trigger-http
