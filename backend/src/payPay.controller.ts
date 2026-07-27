@@ -1,7 +1,7 @@
 import { Controller, HttpException, Request, Get, Post, Put, Delete, Req, Param, Query, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios'
 import { catchError, map } from 'rxjs';
-import { maskHeadersForLog } from './utils/logSanitizer';
+import { maskHeadersForLog, formatErrorForLog } from './utils/logSanitizer';
 const qs = require('qs');
 
 const HOST_PATH = {
@@ -41,7 +41,14 @@ export class PaymentByPayPayController {
     }).pipe(
       map(response => response.data),
       catchError(e => {
-        throw new HttpException(e.response.data, e.response.status);
+        this.logger.log(`error = ${formatErrorForLog(e)}`);
+        if (e.response) {
+          throw new HttpException(e.response.data, e.response.status);
+        }
+        else if (e.request) {
+          throw new HttpException(e.message, 504);
+        }
+        throw new HttpException(e.message, e.status ?? 500);
       }),
     );
   }
@@ -71,7 +78,14 @@ export class PaymentByPayPayController {
     }).pipe(
       map(response => response.data),
       catchError(e => {
-        throw new HttpException(e.response.data, e.response.status);
+        this.logger.log(`error = ${formatErrorForLog(e)}`);
+        if (e.response) {
+          throw new HttpException(e.response.data, e.response.status);
+        }
+        else if (e.request) {
+          throw new HttpException(e.message, 504);
+        }
+        throw new HttpException(e.message, e.status ?? 500);
       }),
     );
   }
@@ -101,7 +115,14 @@ export class PaymentByPayPayController {
     }).pipe(
       map(response => response.data),
       catchError(e => {
-        throw new HttpException(e.response.data, e.response.status);
+        this.logger.log(`error = ${formatErrorForLog(e)}`);
+        if (e.response) {
+          throw new HttpException(e.response.data, e.response.status);
+        }
+        else if (e.request) {
+          throw new HttpException(e.message, 504);
+        }
+        throw new HttpException(e.message, e.status ?? 500);
       }),
     );
   }
@@ -129,7 +150,14 @@ export class PaymentByPayPayController {
     }).pipe(
       map(response => response.data),
       catchError(e => {
-        throw new HttpException(e.response.data, e.response.status);
+        this.logger.log(`error = ${formatErrorForLog(e)}`);
+        if (e.response) {
+          throw new HttpException(e.response.data, e.response.status);
+        }
+        else if (e.request) {
+          throw new HttpException(e.message, 504);
+        }
+        throw new HttpException(e.message, e.status ?? 500);
       }),
     );
   }

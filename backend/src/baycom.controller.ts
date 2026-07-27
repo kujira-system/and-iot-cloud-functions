@@ -1,13 +1,16 @@
-import { Controller, HttpException, Request, Get, Post, Put, Delete, Req, Param, Query } from '@nestjs/common';
+import { Controller, HttpException, Request, Get, Post, Put, Delete, Req, Param, Query, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios'
 import { AppService } from './app.service';
 import { catchError, map } from 'rxjs';
+import { formatErrorForLog } from './utils/logSanitizer';
 const qs = require('qs');
 
 const baseUrl = 'https://api.connected-platform.com/v1/';
 
 @Controller('baycom')
 export class BaycomController {
+  private logger: Logger = new Logger(BaycomController.name);
+
   constructor(
     private readonly httpService: HttpService,
   ) {}
@@ -29,7 +32,14 @@ export class BaycomController {
     }).pipe(
       map(response => response.data),
       catchError(e => {
-        throw new HttpException(e.response.data, e.response.status);
+        this.logger.log(`error = ${formatErrorForLog(e)}`);
+        if (e.response) {
+          throw new HttpException(e.response.data, e.response.status);
+        }
+        else if (e.request) {
+          throw new HttpException(e.message, 504);
+        }
+        throw new HttpException(e.message, e.status ?? 500);
       }),
     );
   }
@@ -52,7 +62,14 @@ export class BaycomController {
     }).pipe(
       map(response => response.data),
       catchError(e => {
-        throw new HttpException(e.response.data, e.response.status);
+        this.logger.log(`error = ${formatErrorForLog(e)}`);
+        if (e.response) {
+          throw new HttpException(e.response.data, e.response.status);
+        }
+        else if (e.request) {
+          throw new HttpException(e.message, 504);
+        }
+        throw new HttpException(e.message, e.status ?? 500);
       }),
     );
   }
@@ -75,7 +92,14 @@ export class BaycomController {
     }).pipe(
       map(response => response.data),
       catchError(e => {
-        throw new HttpException(e.response.data, e.response.status);
+        this.logger.log(`error = ${formatErrorForLog(e)}`);
+        if (e.response) {
+          throw new HttpException(e.response.data, e.response.status);
+        }
+        else if (e.request) {
+          throw new HttpException(e.message, 504);
+        }
+        throw new HttpException(e.message, e.status ?? 500);
       }),
     );
   }
@@ -98,7 +122,14 @@ export class BaycomController {
     }).pipe(
       map(response => response.data),
       catchError(e => {
-        throw new HttpException(e.response.data, e.response.status);
+        this.logger.log(`error = ${formatErrorForLog(e)}`);
+        if (e.response) {
+          throw new HttpException(e.response.data, e.response.status);
+        }
+        else if (e.request) {
+          throw new HttpException(e.message, 504);
+        }
+        throw new HttpException(e.message, e.status ?? 500);
       }),
     );
   }
