@@ -1,6 +1,7 @@
 import { Controller, HttpException, Request, Get, Post, Put, Delete, Req, Param, Query, Logger, InternalServerErrorException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios'
 import { catchError, map } from 'rxjs';
+import { maskHeadersForLog, formatErrorForLog } from './utils/logSanitizer';
 const qs = require('qs');
 
 const baseUrl = 'https://eco.blockchainlock.io/api/eagle-pms/v1/';
@@ -26,7 +27,7 @@ export class KeyvoxController {
       delete requestHeaders.host
     }
     this.logger.log(`url = ${url}`);
-    this.logger.log(`headers = ${JSON.stringify(requestHeaders)}`);
+    this.logger.log(`headers = ${JSON.stringify(maskHeadersForLog(requestHeaders))}`);
     return this.httpService.get(url, {
       headers: requestHeaders
     }).pipe(
@@ -50,7 +51,7 @@ export class KeyvoxController {
     }
     this.logger.log(`url = ${url}`);
     this.logger.log(`body = ${JSON.stringify(requestBody)}`);
-    this.logger.log(`headers = ${JSON.stringify(requestHeaders)}`);
+    this.logger.log(`headers = ${JSON.stringify(maskHeadersForLog(requestHeaders))}`);
     return this.httpService.post(url, requestBody, {
       headers: requestHeaders
     }).pipe(
@@ -74,7 +75,7 @@ export class KeyvoxController {
     }
     this.logger.log(`url = ${url}`);
     this.logger.log(`body = ${JSON.stringify(requestBody)}`);
-    this.logger.log(`headers = ${JSON.stringify(requestHeaders)}`);
+    this.logger.log(`headers = ${JSON.stringify(maskHeadersForLog(requestHeaders))}`);
     return this.httpService.put(url, requestBody, {
       headers: requestHeaders
     }).pipe(
@@ -98,7 +99,7 @@ export class KeyvoxController {
     }
     this.logger.log(`url = ${url}`);
     this.logger.log(`body = ${JSON.stringify(requestBody)}`);
-    this.logger.log(`headers = ${JSON.stringify(requestHeaders)}`);
+    this.logger.log(`headers = ${JSON.stringify(maskHeadersForLog(requestHeaders))}`);
     return this.httpService.delete(url, {
       headers: requestHeaders
     }).pipe(
@@ -108,10 +109,11 @@ export class KeyvoxController {
   }
 
   private async errorHandler(error: any) {
-    this.logger.log(`error = ${error}`);
+    this.logger.log(`error = ${formatErrorForLog(error)}`);
     if (error.response) {
       throw new HttpException(error.response.data, error.response.status);
     }
-    throw new InternalServerErrorException(error);
+    // errorオブジェクトをそのまま渡すとtoJSON()経由でconfig.headers(認証ヘッダー含む)がレスポンスに載る
+    throw new InternalServerErrorException(error.message);
   }
 }
