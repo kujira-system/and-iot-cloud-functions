@@ -2,6 +2,7 @@ import { Controller, HttpException, Request, Get, Post, Put, Delete, Req, Param,
 import { HttpService } from '@nestjs/axios'
 import { AppService } from './app.service';
 import { catchError, map } from 'rxjs';
+import { maskHeadersForLog, formatErrorForLog } from './utils/logSanitizer';
 const qs = require('qs');
 
 const HOST_PATH = {
@@ -37,7 +38,7 @@ export class PmsJtbConnectController {
     }).pipe(
       map(response => response.data),
       catchError(e => {
-        this.logger.log(`error = ${JSON.stringify(e.toJSON())}`);
+        this.logger.log(`error = ${formatErrorForLog(e)}`);
         if (e.response) {
           this.logger.log(`error.response.data = ${JSON.stringify(e.response?.data)}`);
           throw new HttpException(e.response?.data, e.response?.status);
@@ -68,13 +69,13 @@ export class PmsJtbConnectController {
     };
     this.logger.log(`baseUrl = ${baseUrl}`);
     this.logger.log(`url = ${url}`);
-    this.logger.log(`requestHeaders = ${JSON.stringify(requestHeaders)}`);
+    this.logger.log(`requestHeaders = ${JSON.stringify(maskHeadersForLog(requestHeaders))}`);
     return this.httpService.post(url, requestBody, {
       headers: requestHeaders
     }).pipe(
       map(response => response.data),
       catchError(e => {
-        this.logger.log(`error = ${JSON.stringify(e.toJSON())}`);
+        this.logger.log(`error = ${formatErrorForLog(e)}`);
         if (e.response) {
           this.logger.log(`error.response.data = ${JSON.stringify(e.response?.data)}`);
           throw new HttpException(e.response?.data, e.response?.status);
@@ -108,7 +109,7 @@ export class PmsJtbConnectController {
     }).pipe(
       map(response => response.data),
       catchError(e => {
-        this.logger.log(`error = ${JSON.stringify(e.toJSON())}`);
+        this.logger.log(`error = ${formatErrorForLog(e)}`);
         if (e.response) {
           this.logger.log(`error.response.data = ${JSON.stringify(e.response?.data)}`);
           throw new HttpException(e.response?.data, e.response?.status);
@@ -142,7 +143,7 @@ export class PmsJtbConnectController {
     }).pipe(
       map(response => response.data),
       catchError(e => {
-        this.logger.log(`error = ${JSON.stringify(e.toJSON())}`);
+        this.logger.log(`error = ${formatErrorForLog(e)}`);
         if (e.response) {
           this.logger.log(`error.response.data = ${JSON.stringify(e.response?.data)}`);
           throw new HttpException(e.response?.data, e.response?.status);
