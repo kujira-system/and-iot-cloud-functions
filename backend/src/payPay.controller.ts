@@ -4,10 +4,11 @@ import { catchError, map } from 'rxjs';
 import { maskHeadersForLog, formatErrorForLog } from './utils/logSanitizer';
 const qs = require('qs');
 
+// 2026-11-01にPayPay側で旧ドメイン(api.paypay.ne.jp等)が廃止されるため新ドメインへ移行
 const HOST_PATH = {
-  PROD: 'https://api.paypay.ne.jp',
-  STAGING: 'https://stg-api.sandbox.paypay.ne.jp',
-  PERF_MODE: 'https://perf-api.paypay.ne.jp',
+  PROD: 'https://apigw.paypay.ne.jp',
+  STAGING: 'https://apigw.sandbox.paypay.ne.jp',
+  PERF_MODE: 'https://perf-apigw.paypay.ne.jp',
 };
 
 @Controller(`payPay/:environment(PROD|STAGING|PERF_MODE)/`)
