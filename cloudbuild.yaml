@@ -26,6 +26,12 @@ steps:
     waitFor:
       - 'Install: backend'
 
+  # 起動権限(IAM)はデプロイでは変えない(DMS-1277)。--allow-unauthenticated / --no-allow-unauthenticated を付けないと
+  # gcloud は IAM に触れない。付けても Cloud Build の SA に setIamPolicy が無いと、警告だけ出してビルドは成功する
+  # (本番は cloudfunctions.developer で、実際に毎回失敗していた)。切り替え・切り戻しは Owner が
+  # gcloud functions add-iam-policy-binding / remove-iam-policy-binding で行う。
+  # --no-gen2: gen1 のまま保つ。未指定だと既存の関数の世代に従うが、関数が無いときは gen2 で作られる
+  # (起動権限のロールや IAM 認証のヘッダの扱いが gen1 と違う)
   - id: 'Deploy: backend'
     name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: 'bash'
@@ -35,12 +41,12 @@ steps:
       - functions
       - deploy
       - ${_FUNCTION_NAME}
+      - --no-gen2
       - --entry-point=api
       - --runtime=nodejs22
       - --region=${_FUNCTION_REGION}
       - --source=.
       - --trigger-http
-      - --allow-unauthenticated
       - --egress-settings=all
       - --vpc-connector=projects/$PROJECT_ID/locations/${_VPC_ACCESS_REGION}/connectors/${_VPC_ACCESS_CONNECTOR_NAME}
       - --env-vars-file=.env.yaml

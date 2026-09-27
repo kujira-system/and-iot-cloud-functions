@@ -1,7 +1,8 @@
 import { Controller, HttpException, Request, Get, Post, Put, Delete, Req, Param, Query, Logger, InternalServerErrorException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios'
 import { catchError, map } from 'rxjs';
-import { maskHeadersForLog, formatErrorForLog, summarizeBodyForLog } from './utils/logSanitizer';
+import { formatErrorForLog, summarizeBodyForLog } from './utils/logSanitizer';
+import { buildUpstreamHeaders } from './utils/upstreamHeaders';
 const qs = require('qs');
 
 const baseUrl = 'https://eco.blockchainlock.io/api/eagle-pms/v1/';
@@ -22,12 +23,9 @@ export class KeyvoxController {
   ) {
     const queryStr = qs.stringify(queries);
     const url = baseUrl + params['0'] + (queryStr ? '?' + queryStr : '');
-    const requestHeaders: any = request.headers;
-    if (requestHeaders.host !== undefined) {
-      delete requestHeaders.host
-    }
+    const requestHeaders = buildUpstreamHeaders('keyvox', request.headers as any);
     this.logger.log(`url = ${url}`);
-    this.logger.log(`headers = ${JSON.stringify(maskHeadersForLog(requestHeaders))}`);
+    this.logger.log(`forwardedHeaders = ${JSON.stringify(Object.keys(requestHeaders))}`);
     return this.httpService.get(url, {
       headers: requestHeaders
     }).pipe(
@@ -45,13 +43,10 @@ export class KeyvoxController {
     const queryStr = qs.stringify(queries);
     const url = baseUrl + params['0'] + (queryStr ? '?' + queryStr : '');
     const requestBody = request.body;
-    const requestHeaders: any = request.headers;
-    if (requestHeaders.host !== undefined) {
-      delete requestHeaders.host
-    }
+    const requestHeaders = buildUpstreamHeaders('keyvox', request.headers as any);
     this.logger.log(`url = ${url}`);
     this.logger.log(`bodyKeys = ${summarizeBodyForLog(requestBody)}`);
-    this.logger.log(`headers = ${JSON.stringify(maskHeadersForLog(requestHeaders))}`);
+    this.logger.log(`forwardedHeaders = ${JSON.stringify(Object.keys(requestHeaders))}`);
     return this.httpService.post(url, requestBody, {
       headers: requestHeaders
     }).pipe(
@@ -69,13 +64,10 @@ export class KeyvoxController {
     const queryStr = qs.stringify(queries);
     const url = baseUrl + params['0'] + (queryStr ? '?' + queryStr : '');
     const requestBody = request.body;
-    const requestHeaders: any = request.headers;
-    if (requestHeaders.host !== undefined) {
-      delete requestHeaders.host
-    }
+    const requestHeaders = buildUpstreamHeaders('keyvox', request.headers as any);
     this.logger.log(`url = ${url}`);
     this.logger.log(`bodyKeys = ${summarizeBodyForLog(requestBody)}`);
-    this.logger.log(`headers = ${JSON.stringify(maskHeadersForLog(requestHeaders))}`);
+    this.logger.log(`forwardedHeaders = ${JSON.stringify(Object.keys(requestHeaders))}`);
     return this.httpService.put(url, requestBody, {
       headers: requestHeaders
     }).pipe(
@@ -93,13 +85,10 @@ export class KeyvoxController {
     const queryStr = qs.stringify(queries);
     const url = baseUrl + params['0'] + (queryStr ? '?' + queryStr : '');
     const requestBody = request.body;
-    const requestHeaders: any = request.headers;
-    if (requestHeaders.host !== undefined) {
-      delete requestHeaders.host
-    }
+    const requestHeaders = buildUpstreamHeaders('keyvox', request.headers as any);
     this.logger.log(`url = ${url}`);
     this.logger.log(`bodyKeys = ${summarizeBodyForLog(requestBody)}`);
-    this.logger.log(`headers = ${JSON.stringify(maskHeadersForLog(requestHeaders))}`);
+    this.logger.log(`forwardedHeaders = ${JSON.stringify(Object.keys(requestHeaders))}`);
     return this.httpService.delete(url, {
       headers: requestHeaders
     }).pipe(

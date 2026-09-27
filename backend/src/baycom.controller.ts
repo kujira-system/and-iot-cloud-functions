@@ -3,6 +3,7 @@ import { HttpService } from '@nestjs/axios'
 import { AppService } from './app.service';
 import { catchError, map } from 'rxjs';
 import { formatErrorForLog } from './utils/logSanitizer';
+import { buildUpstreamHeaders } from './utils/upstreamHeaders';
 const qs = require('qs');
 
 const baseUrl = 'https://api.connected-platform.com/v1/';
@@ -23,10 +24,7 @@ export class BaycomController {
   ) {
     const queryStr = qs.stringify(queries);
     const url = baseUrl + params['0'] + (queryStr ? '?' + queryStr : '');
-    const requestHeaders: any = request.headers;
-    if (requestHeaders.host !== undefined) {
-      delete requestHeaders.host
-    }
+    const requestHeaders = buildUpstreamHeaders('baycom', request.headers as any);
     return this.httpService.get(url, {
       headers: requestHeaders
     }).pipe(
@@ -53,10 +51,7 @@ export class BaycomController {
     const queryStr = qs.stringify(queries);
     const url = baseUrl + params['0'] + (queryStr ? '?' + queryStr : '');
     const requestBody = request.body;
-    const requestHeaders: any = request.headers;
-    if (requestHeaders.host !== undefined) {
-      delete requestHeaders.host
-    }
+    const requestHeaders = buildUpstreamHeaders('baycom', request.headers as any);
     return this.httpService.post(url, requestBody, {
       headers: requestHeaders
     }).pipe(
@@ -83,10 +78,7 @@ export class BaycomController {
     const queryStr = qs.stringify(queries);
     const url = baseUrl + params['0'] + (queryStr ? '?' + queryStr : '');
     const requestBody = request.body;
-    const requestHeaders: any = request.headers;
-    if (requestHeaders.host !== undefined) {
-      delete requestHeaders.host
-    }
+    const requestHeaders = buildUpstreamHeaders('baycom', request.headers as any);
     return this.httpService.put(url, requestBody, {
       headers: requestHeaders
     }).pipe(
@@ -113,10 +105,7 @@ export class BaycomController {
     const queryStr = qs.stringify(queries);
     const url = baseUrl + params['0'] + (queryStr ? '?' + queryStr : '');
     const requestBody = request.body;
-    const requestHeaders: any = request.headers;
-    if (requestHeaders.host !== undefined) {
-      delete requestHeaders.host
-    }
+    const requestHeaders = buildUpstreamHeaders('baycom', request.headers as any);
     return this.httpService.delete(url, {
       headers: requestHeaders
     }).pipe(

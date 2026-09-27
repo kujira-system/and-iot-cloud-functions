@@ -2,6 +2,7 @@ import { Controller, HttpException, Request, Get, Post, Put, Delete, Req, Param,
 import { HttpService } from '@nestjs/axios'
 import { catchError, map } from 'rxjs';
 import { maskHeadersForLog, formatErrorForLog, summarizeBodyForLog } from './utils/logSanitizer';
+import { buildUpstreamHeaders } from './utils/upstreamHeaders';
 const qs = require('qs');
 
 // 2026-11-01にPayPay側で旧ドメイン(api.paypay.ne.jp等)が廃止されるため新ドメインへ移行
@@ -29,11 +30,7 @@ export class PaymentByPayPayController {
     const baseUrl = HOST_PATH[environment];
     const queryStr = qs.stringify(queries);
     const url = `${baseUrl}/${params['0']}${(queryStr ? '?' + queryStr : '')}`;
-    const requestHeaders = {
-      "X-ASSUME-MERCHANT": request.headers["x-assume-merchant"],
-      "content-type": request.headers["content-type"],
-      "Authorization": request.headers["authorization"],
-    };
+    const requestHeaders = buildUpstreamHeaders('payPay', request.headers as any);
     this.logger.log(`baseUrl = ${baseUrl}`);
     this.logger.log(`url = ${url}`);
     this.logger.log(`requestHeaders = ${JSON.stringify(maskHeadersForLog(requestHeaders))}`);
@@ -65,11 +62,7 @@ export class PaymentByPayPayController {
     const queryStr = qs.stringify(queries);
     const url = `${baseUrl}/${params['0']}${(queryStr ? '?' + queryStr : '')}`;
     const requestBody = request.body;
-    const requestHeaders = {
-      "X-ASSUME-MERCHANT": request.headers["x-assume-merchant"],
-      "content-type": request.headers["content-type"],
-      "Authorization": request.headers["authorization"],
-    };
+    const requestHeaders = buildUpstreamHeaders('payPay', request.headers as any);
     this.logger.log(`baseUrl = ${baseUrl}`);
     this.logger.log(`url = ${url}`);
     this.logger.log(`requestHeaders = ${JSON.stringify(maskHeadersForLog(requestHeaders))}`);
@@ -102,11 +95,7 @@ export class PaymentByPayPayController {
     const queryStr = qs.stringify(queries);
     const url = `${baseUrl}/${params['0']}${(queryStr ? '?' + queryStr : '')}`;
     const requestBody = request.body;
-    const requestHeaders = {
-      "X-ASSUME-MERCHANT": request.headers["x-assume-merchant"],
-      "content-type": request.headers["content-type"],
-      "Authorization": request.headers["authorization"],
-    };
+    const requestHeaders = buildUpstreamHeaders('payPay', request.headers as any);
     this.logger.log(`baseUrl = ${baseUrl}`);
     this.logger.log(`url = ${url}`);
     this.logger.log(`requestHeaders = ${JSON.stringify(maskHeadersForLog(requestHeaders))}`);
@@ -138,11 +127,7 @@ export class PaymentByPayPayController {
     const baseUrl = HOST_PATH[environment];
     const queryStr = qs.stringify(queries);
     const url = `${baseUrl}/${params['0']}${(queryStr ? '?' + queryStr : '')}`;
-    const requestHeaders = {
-      "X-ASSUME-MERCHANT": request.headers["x-assume-merchant"],
-      "content-type": request.headers["content-type"],
-      "Authorization": request.headers["authorization"],
-    };
+    const requestHeaders = buildUpstreamHeaders('payPay', request.headers as any);
     this.logger.log(`baseUrl = ${baseUrl}`);
     this.logger.log(`url = ${url}`);
     this.logger.log(`requestHeaders = ${JSON.stringify(maskHeadersForLog(requestHeaders))}`);
