@@ -65,6 +65,31 @@ describe('relay controllers', () => {
     });
   });
 
+  it('keyvox: 今の呼び出し（Authorization に HMAC）は PUT でもそのまま送る', async () => {
+    await request(app.getHttpServer())
+      .put('/api/keyvox/changeLockPin')
+      .set('Authorization', KEYVOX_AUTH)
+      .set('date', 'Sun, 27 Sep 2026 00:00:00 GMT')
+      .set('digest', 'SHA-256=abc')
+      .set('x-target-host', 'default.pms')
+      .set('forwarded', 'for="34.84.117.68";proto=https')
+      .send({ a: 1 })
+      .expect(200);
+
+    const [url, body, config] = httpService.put.mock.calls[0];
+    expect(url).toBe(
+      'https://eco.blockchainlock.io/api/eagle-pms/v1/changeLockPin',
+    );
+    expect(body).toEqual({ a: 1 });
+    expect(config.headers).toEqual({
+      'content-type': 'application/json',
+      date: 'Sun, 27 Sep 2026 00:00:00 GMT',
+      digest: 'SHA-256=abc',
+      'x-target-host': 'default.pms',
+      authorization: KEYVOX_AUTH,
+    });
+  });
+
   it('baycom: 今の呼び出し（Authorization に Basic）はそのまま送る', async () => {
     await request(app.getHttpServer())
       .get('/api/baycom/rest/devices')
