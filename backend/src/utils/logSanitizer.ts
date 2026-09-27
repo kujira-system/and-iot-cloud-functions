@@ -1,6 +1,7 @@
 // 認証系ヘッダーをログに出さないためのマスク
 const SENSITIVE_HEADER_NAMES = [
   'authorization',
+  'x-upstream-authorization',
   'ocp-apim-subscription-key',
   'x-assume-merchant',
   'apikey',

@@ -7,7 +7,6 @@ async function bootstrap() {
 
   app.useGlobalFilters(new HttpExceptionFilter());
   app.setGlobalPrefix('api');
-  app.enableCors();
 
   await app.listen(Number(process.env.PORT) || 3300);
 }
