@@ -1,5 +1,5 @@
 // import { HttpModule } from '@nestjs/axios';
-import { Module, } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -7,6 +7,7 @@ import { BaycomController } from './baycom.controller';
 import { KeyvoxController } from './keyvox.controller';
 import { PaymentByPayPayController } from './payPay.controller';
 import { PmsJtbConnectController } from './jtbConnect.controller';
+import { RelayAuthObserverMiddleware } from './relayAuthObserver.middleware';
 
 @Module({
   imports: [
@@ -21,4 +22,8 @@ import { PmsJtbConnectController } from './jtbConnect.controller';
   ],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RelayAuthObserverMiddleware).forRoutes('*');
+  }
+}

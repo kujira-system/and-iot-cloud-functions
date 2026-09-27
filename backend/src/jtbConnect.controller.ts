@@ -3,6 +3,7 @@ import { HttpService } from '@nestjs/axios'
 import { AppService } from './app.service';
 import { catchError, map } from 'rxjs';
 import { maskHeadersForLog, formatErrorForLog } from './utils/logSanitizer';
+import { buildUpstreamHeaders } from './utils/upstreamHeaders';
 const qs = require('qs');
 
 const HOST_PATH = {
@@ -29,10 +30,7 @@ export class PmsJtbConnectController {
 
     const queryStr = qs.stringify(queries);
     const url = `${baseUrl}/${params['0']}${(queryStr ? '?' + queryStr : '')}`;
-    const requestHeaders = {
-      "Ocp-Apim-Subscription-Key": request.headers["ocp-apim-subscription-key"],
-      "content-type": request.headers["content-type"]
-    };
+    const requestHeaders = buildUpstreamHeaders('jtbConnect', request.headers as any);
     return this.httpService.get(url, {
       headers: requestHeaders
     }).pipe(
@@ -63,10 +61,7 @@ export class PmsJtbConnectController {
     const queryStr = qs.stringify(queries);
     const url = `${baseUrl}/${params['0']}${(queryStr ? '?' + queryStr : '')}`;
     const requestBody = request.body;
-    const requestHeaders = {
-      "Ocp-Apim-Subscription-Key": request.headers["ocp-apim-subscription-key"],
-      "content-type": request.headers["content-type"]
-    };
+    const requestHeaders = buildUpstreamHeaders('jtbConnect', request.headers as any);
     this.logger.log(`baseUrl = ${baseUrl}`);
     this.logger.log(`url = ${url}`);
     this.logger.log(`requestHeaders = ${JSON.stringify(maskHeadersForLog(requestHeaders))}`);
@@ -100,10 +95,7 @@ export class PmsJtbConnectController {
     const queryStr = qs.stringify(queries);
     const url = `${baseUrl}/${params['0']}${(queryStr ? '?' + queryStr : '')}`;
     const requestBody = request.body;
-    const requestHeaders = {
-      "Ocp-Apim-Subscription-Key": request.headers["ocp-apim-subscription-key"],
-      "content-type": request.headers["content-type"]
-    };
+    const requestHeaders = buildUpstreamHeaders('jtbConnect', request.headers as any);
     return this.httpService.put(url, requestBody, {
       headers: requestHeaders
     }).pipe(
@@ -134,10 +126,7 @@ export class PmsJtbConnectController {
     const queryStr = qs.stringify(queries);
     const url = `${baseUrl}/${params['0']}${(queryStr ? '?' + queryStr : '')}`;
     const requestBody = request.body;
-    const requestHeaders = {
-      "Ocp-Apim-Subscription-Key": request.headers["ocp-apim-subscription-key"],
-      "content-type": request.headers["content-type"]
-    };
+    const requestHeaders = buildUpstreamHeaders('jtbConnect', request.headers as any);
     return this.httpService.delete(url, {
       headers: requestHeaders
     }).pipe(
